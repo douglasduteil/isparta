@@ -20,6 +20,16 @@ $ npm install --save-dev douglasduteil/isparta
 
 ## Usage
 
+```bash
+isparta cover src/foo.es6.js
+istanbul report text-summary
+```
+
+**Not all the istanbul command/options are available with isparta**
+**Consult `isparta -h` for more information**
+
+### With Karma
+
 To use isparta, set the [instrumenter](https://github.com/karma-runner/karma-coverage/blob/master/README.md#instrumenter) for the JavaScript file type to `isparta`.
 
 ```js

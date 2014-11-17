@@ -1,4 +1,4 @@
-# isparta
+# isparta [![Build Status][travis-image]][travis-url] [![NPM version][npm-image]][npm-url]
 
 > Isparta is a code coverage tool for ES6 using the [6to5](https://github.com/6to5/6to5).
 
@@ -70,4 +70,7 @@ coverageReporter: {
     terms of the Do What The Fuck You Want To Public License, Version 2,
     as published by Sam Hocevar. See the LICENCE file for more details.
 
-
+[npm-url]: https://npmjs.org/package/isparta
+[npm-image]: http://img.shields.io/npm/v/isparta.svg
+[travis-url]: http://travis-ci.org/douglasduteil/isparta
+[travis-image]: http://travis-ci.org/douglasduteil/isparta.svg?branch=master

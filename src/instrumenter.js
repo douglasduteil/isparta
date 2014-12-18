@@ -15,7 +15,7 @@ export class Instrumenter extends istanbul.Instrumenter {
     this.to5Options = Object.assign({
       module: 'ignore',
       sourceMap: true
-    }, this.options && this.options.to5 && this.options.to5.options || {});
+    }, options && options.to5 && options.to5.options || {});
     super(options);
   }
 

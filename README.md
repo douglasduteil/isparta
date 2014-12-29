@@ -2,7 +2,7 @@
 
 > Isparta is a code coverage tool for ES6 using the [6to5](https://github.com/6to5/6to5).
 
-It's intention is to be used with [karma](http://karma-runner.github.io/) and [karma-coverage](https://github.com/karma-runner/karma-coverage), which provides code coverage reports using [istanbul](https://github.com/gotwarlost/istanbul).
+Its intention is to be used with [karma](http://karma-runner.github.io/) and [karma-coverage](https://github.com/karma-runner/karma-coverage), which provides code coverage reports using [istanbul](https://github.com/gotwarlost/istanbul).
 
 ## Installation
 

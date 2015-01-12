@@ -32,6 +32,7 @@
   },
   "license": "WTFPL",
   "dependencies": {
+    "6to5": "^2.11.0",
     "escodegen": "^1.4.0",
     "esprima": "^1.2.2",
     "istanbul": "^0.3.2",
@@ -43,9 +44,6 @@
   "devDependencies": {
     "chai": "^1.10.0",
     "mocha": "^2.0.1"
-  },
-  "peerDependencies": {
-    "6to5": "^1"
   },
   "scripts": {
     "start": "6to5 src --out-dir lib",

@@ -16,7 +16,9 @@ export class Instrumenter extends istanbul.Instrumenter {
       module: 'ignore',
       sourceMap: true
     }, options && options.to5 && options.to5.options || {});
-    super(options);
+
+    istanbul.Instrumenter.call(this, options);
+
   }
 
   instrumentSync(code, fileName) {

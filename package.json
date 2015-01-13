@@ -1,6 +1,6 @@
 {
   "name": "isparta",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A code coverage tool for ES6 (6to5)",
   "main": "./lib/isparta",
   "keywords": [
@@ -47,7 +47,7 @@
     "mocha": "^2.0.1"
   },
   "scripts": {
-    "dist": "6to5 --experimental src --out-dir lib ",
+    "dist": "6ton5 --experimental src --out-dir lib ",
     "test": "mocha test/cover.spec.js --compilers 6to5:./register"
   }
 }

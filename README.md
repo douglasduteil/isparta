@@ -35,6 +35,7 @@ To use isparta, set the [instrumenter](https://github.com/karma-runner/karma-cov
 ```js
 coverageReporter: {
   // configure the reporter to use isparta for JavaScript coverage
+  // Only on { "karma-coverage": "douglasduteil/karma-coverage#next" }
   instrumenters: { isparta : require('isparta') },
   instrumenter: {
     '**/*.js': 'isparta'
@@ -42,23 +43,23 @@ coverageReporter: {
 }
 ```
 
-But can customize the 6to5 options
+But can customize the 6to5 options thanks to my [fork](https://github.com/douglasduteil/karma-coverage/tree/next)
 
 ```js
+
+var to5Options = { experimental: true };
+
+// [...]
+
 coverageReporter: {
   // configure the reporter to use isparta for JavaScript coverage
+  // Only on { "karma-coverage": "douglasduteil/karma-coverage#next" }
   instrumenters: { isparta : require('isparta') },
   instrumenter: {
     '**/*.js': 'isparta'
   },
   instrumenterOptions: {
-    isparta: {
-      to5: {
-        options: {
-          modules: 'umd'
-        }
-      }
-    }
+    isparta: { to5 : to5Options }
   }
 }
 ```

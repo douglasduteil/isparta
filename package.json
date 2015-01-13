@@ -32,21 +32,22 @@
   },
   "license": "WTFPL",
   "dependencies": {
-    "6to5": "^2.11.0",
     "escodegen": "^1.4.0",
     "esprima": "^1.2.2",
     "istanbul": "^0.3.2",
     "lodash.partial": "^2.4.1",
     "nomnom": "^1.8.1",
+    "resolve": "^1.0.0",
     "source-map": "^0.1.38",
     "which": "^1.0.5"
   },
   "devDependencies": {
+    "6to5": "^2.11.4",
     "chai": "^1.10.0",
     "mocha": "^2.0.1"
   },
   "scripts": {
-    "start": "6to5 src --out-dir lib",
+    "dist": "6to5 --experimental src --out-dir lib ",
     "test": "mocha test/cover.spec.js --compilers 6to5:./register"
   }
 }

@@ -1,21 +1,29 @@
 
-import '6to5/polyfill';
+import istanbul from 'istanbul';
 
-import * as istanbul from 'istanbul';
-import * as to5 from '6to5';
+import resolve from 'resolve';
 
-import * as esprima from 'esprima';
-import * as escodegen from 'escodegen';
+let to5;
+try {
+  to5 = require(resolve.sync('6to5', { basedir: process.cwd() }));
+} catch(_) {
+  console.warn('Coverage using inner 6to5. version : ' + to5.version);
+  to5 = require('6to5');
+}
+
+import esprima from 'esprima';
+import escodegen from 'escodegen';
 
 import {SourceMapConsumer, SourceMapGenerator} from 'source-map';
 
 export class Instrumenter extends istanbul.Instrumenter {
 
   constructor(options = {}) {
-    this.to5Options = Object.assign({
+    this.to5Options = {
       module: 'ignore',
-      sourceMap: true
-    }, options && options.to5 && options.to5.options || {});
+      sourceMap: true,
+      ...(options && options.to5 || {})
+    };
 
     istanbul.Instrumenter.call(this, options);
 
@@ -23,7 +31,7 @@ export class Instrumenter extends istanbul.Instrumenter {
 
   instrumentSync(code, fileName) {
 
-    let result = this._r = to5.transform(code, Object.assign({}, this.to5Options, {filename: fileName}));
+    let result = this._r = to5.transform(code, { ...this.to5Options, filename: fileName });
     this._6to5Map = new SourceMapConsumer(result.map);
 
     // PARSE

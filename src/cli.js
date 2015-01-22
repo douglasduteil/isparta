@@ -1,13 +1,13 @@
 //
 
 import {existsSync, writeFileSync} from 'fs';
-import * as path from 'path';
-import * as Module from 'module';
+import path from 'path';
+import Module from 'module';
 
 //
-import * as which from 'which';
-import * as partial from 'lodash.partial';
-import * as nomnom from 'nomnom';
+import which from 'which';
+import partial from 'lodash.partial';
+import nomnom from 'nomnom';
 import {hook, Reporter, matcherFor, config as configuration} from 'istanbul';
 import {Instrumenter} from './instrumenter';
 

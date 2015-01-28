@@ -20,7 +20,6 @@ export class Instrumenter extends istanbul.Instrumenter {
 
   constructor(options = {}) {
     this.to5Options = {
-      modules: 'ignore',
       sourceMap: true,
       ...(options && options.to5 || {})
     };

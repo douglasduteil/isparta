@@ -131,7 +131,7 @@ function coverCmd(opts) {
       writeFileSync(file, JSON.stringify(cov), 'utf8');
     });
 
-    if (config.instrumentation.preloadSources()) {
+    if (config.instrumentation.includeAllSources()) {
       matchFn.files.forEach(function (file) {
         if (opts.verbose) { console.error('Preload ' + file); }
         try {

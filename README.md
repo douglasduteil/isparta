@@ -64,6 +64,8 @@ coverageReporter: {
 }
 ```
 
+![](screenshot.png)
+
 ## License
 
     Copyright © 2014 Douglas Duteil <douglasduteil@gmail.com>

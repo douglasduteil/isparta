@@ -4,7 +4,7 @@
 import {expect} from 'chai';
 import {Instrumenter, Reporter} from '../src/isparta';
 
-describe('sourcemap hack', () => {
+describe('sourcemap hack', function () {
 
   let instrumenter = new Instrumenter();
 

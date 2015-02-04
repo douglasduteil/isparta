@@ -7,8 +7,8 @@ let to5;
 try {
   to5 = require(resolve.sync('6to5', { basedir: process.cwd() }));
 } catch(_) {
-  console.warn('Coverage using inner 6to5. version : ' + to5.version);
   to5 = require('6to5');
+  console.warn('Coverage using inner 6to5. version : ' + to5.version);
 }
 
 import esprima from 'esprima';
@@ -103,4 +103,3 @@ export class Instrumenter extends istanbul.Instrumenter {
     return lastLine;
   }
 }
-

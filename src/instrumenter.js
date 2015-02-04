@@ -1,15 +1,6 @@
 
 import istanbul from 'istanbul';
-
-import resolve from 'resolve';
-
-let to5;
-try {
-  to5 = require(resolve.sync('6to5', { basedir: process.cwd() }));
-} catch(_) {
-  console.warn('Coverage using inner 6to5. version : ' + to5.version);
-  to5 = require('6to5');
-}
+import to5 from '6to5';
 
 import esprima from 'esprima';
 import escodegen from 'escodegen';

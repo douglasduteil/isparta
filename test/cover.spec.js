@@ -4,133 +4,169 @@
 import {expect} from 'chai';
 import {Instrumenter, Reporter} from '../src/isparta';
 
-describe('sourcemap hack', function () {
-
-  let instrumenter = new Instrumenter();
-
-  const content = `
+const content = `
 ONE.foo = function (bar) {
   return baz(bar ? 0 : 1);
 };
 `;
 
-  // Generated code by 6to5
-  // 1. "use strict";
-  // 2.
-  // 3. ONE.foo = function (bar) {
-  // 4.   return baz(bar ? 0 : 1);
-  // 5. };
+const contentLines = content.split('\n');
 
-  const expectedCoverState = {
-    statementMap: [
-      {
-        start: {source: 'foo.js', line: 2, column: 0, name: null},
-        end: {source: 'foo.js', line: 4, column: 2, name: null},
-        skip: undefined
+// ES6 code
+// 1. ONE.foo = function (bar) {
+// 2.   return baz(bar ? 0 : 1);
+// 3. };
+// Generated code by 6to5
+// 1. "use strict";
+// 2.
+// 3. ONE.foo = function (bar) {
+// 4.   return baz(bar ? 0 : 1);
+// 5. };
+
+const expectedCoverState = {
+  statementMap: [
+    {
+      start: {source: 'foo.js', line: 2, column: 0, name: null},
+      end: {source: 'foo.js', line: 4, column: 2, name: null},
+      skip: undefined
+    },
+    {
+      start: {source: 'foo.js', line: 3, column: 2, name: null},
+      end: {source: 'foo.js', line: 3, column: 26, name: null},
+      skip: undefined
+    }
+  ],
+
+  fnMap: [
+    {
+      name: '(anonymous_1)', line: 2,
+      loc: {
+        start: {source: 'foo.js', line: 2, column: 10, name: null},
+        end: {source: 'foo.js', line: 2, column: 25, name: null}
       },
-      {
-        start: {source: 'foo.js', line: 3, column: 2, name: null},
-        end: {source: 'foo.js', line: 3, column: 26, name: null},
-        skip: undefined
-      }
-    ],
+      skip: undefined
+    }
+  ],
 
-    fnMap: [
-      {
-        name: '(anonymous_1)', line: 2,
-        loc: {
-          start: {source: 'foo.js', line: 2, column: 10, name: null},
-          end: {source: 'foo.js', line: 2, column: 25, name: null}
+  branchMap: [
+    {
+      line: 3, type: 'cond-expr',
+      locations: [
+        {
+          start: {source: 'foo.js', line: 3, column: 19, name: null},
+          end: {source: 'foo.js', line: 3, column: 20, name: null},
+          skip: undefined
         },
-        skip: undefined
-      }
-    ],
+        {
+          start: {source: 'foo.js', line: 3, column: 23, name: null},
+          end: {source: 'foo.js', line: 3, column: 24, name: null},
+          skip: undefined
+        }
+      ]
+    }
+  ]
+};
 
-    branchMap: [
-      {
-        line: 3, type: 'cond-expr',
-        locations: [
+
+function extractExpectInLine(line, { start, end }) {
+  return line.substring(start.column, end.column);
+}
+
+function extractExpect(location) {
+  if (!location) return '';
+  let { start, end } = location;
+  return start.line === end.line ?
+    extractExpectInLine(contentLines[start.line - 1], location) :
+    Array.from(
+      new Array(end.line - start.line + 1),
+      (x,i) => {
+        let lastLine = start.line + i === end.line;
+        return extractExpectInLine(
+          contentLines[start.line - 1 + i],
           {
-            start: {source: 'foo.js', line: 3, column: 19, name: null},
-            end: {source: 'foo.js', line: 3, column: 20, name: null},
-            skip: undefined
-          },
-          {
-            start: {source: 'foo.js', line: 3, column: 23, name: null},
-            end: {source: 'foo.js', line: 3, column: 24, name: null},
-            skip: undefined
+            start : { column : !i ? start.column : 0 },
+            end : { column : lastLine ? end.column : Infinity }
           }
-        ]
+        );
       }
-    ]
-  };
+    ).join('\n');
+}
 
-  it('should correctly localize the statements', (done) => {
+describe('Isparta instrumenter', function () {
 
-    instrumenter.instrument(content, 'foo.js', (err) => {
+  before(function () {
+    this.instrumenter = new Instrumenter();
+  });
 
-      if (err) {
-        console.error(err.stack);
-      }
+  describe('source map hacks', function () {
 
-      let {statementMap} = instrumenter.coverState;
+    before(function (done) {
 
-      Object
-        .keys(statementMap)
-        .map(key => statementMap[key] || [])
-        .forEach((loc, i) => {
-          expect(loc, `Expect the ${i}-th statements to deeply equal.`).to.eql(expectedCoverState.statementMap[i]);
+      this.instrumenter.instrument(content, 'foo.js', (err) => {
+        if (err) { console.error(err.stack); }
+
+        let {statementMap, fnMap, branchMap} = this.instrumenter.coverState;
+
+        this.statementMapArray = values(statementMap);
+        this.fnMapArray = values(fnMap);
+        this.branchMapArray = values(branchMap);
+
+        done();
+      });
+
+      function values(arr){ return Object.keys(arr).map(key => arr[key] || []); }
+
+    });
+
+    describe('statement maps', function () {
+      it('should localize the statements', function (){
+        this.statementMapArray.forEach((loc, i) => {
+          expect(loc, `Expect the ${i}-th statements to be deeply equal.`).to.eql(expectedCoverState.statementMap[i] || {});
         });
+      });
 
-      done();
+      it('should match the code snippet', function (){
+        this.statementMapArray.forEach((loc, i) => {
+          let expectCode = extractExpect(expectedCoverState.statementMap[i]);
+          let actualCode = extractExpect(loc);
+          expect(actualCode, `Expect the ${i}-th statement to coverthe same code snippet.`).to.equal(expectCode);
+        });
+      });
+    });
+
+    describe('functions maps', function () {
+      it('should localize the statements', function (){
+        this.fnMapArray.forEach((fn, i) => {
+          expect(fn, `Expect the ${i}-th functions to be deeply equal.`).to.eql(expectedCoverState.fnMap[i] || {});
+        });
+      });
+
+      it('should match the code snippet', function (){
+        this.fnMapArray.forEach(({loc}, i) => {
+          let expectCode = extractExpect(expectedCoverState.fnMap[i].loc);
+          let actualCode = extractExpect(loc);
+          expect(actualCode, `Expect the ${i}-th functions to coverthe same code snippet.`).to.equal(expectCode);
+        });
+      });
+    });
+
+    describe('branches maps', function () {
+      it('should localize the statements', function (){
+        this.branchMapArray.forEach((br, i) => {
+          expect(br, `Expect the ${i}-th branches to be deeply equal.`).to.eql(expectedCoverState.branchMap[i] || {});
+        });
+      });
+
+      it('should match the code snippet', function (){
+        this.branchMapArray.forEach(({locations}, i) => {
+          locations.forEach((loc, j) => {
+            let expectCode = extractExpect(expectedCoverState.branchMap[i].locations[j]);
+            let actualCode = extractExpect(loc);
+            expect(actualCode, `Expect the ${i}-th branches to coverthe same code snippet.`).to.equal(expectCode);
+          });
+        });
+      });
     });
 
   });
-
-
-  it('should correctly localize the functions', (done) => {
-
-    instrumenter.instrument(content, 'foo.js', (err) => {
-
-      if (err) {
-        console.error(err.stack);
-      }
-
-      let {fnMap} = instrumenter.coverState;
-
-      Object
-        .keys(fnMap)
-        .map(key => fnMap[key] || [])
-        .forEach((fn, i) => {
-          expect(fn, `Expect the ${i}-th functions to deeply equal.`).to.eql(expectedCoverState.fnMap[i]);
-        });
-
-      done();
-    });
-
-  });
-
-
-  it('should correctly localize the branches', (done) => {
-
-    instrumenter.instrument(content, 'foo.js', (err) => {
-
-      if (err) {
-        console.error(err.stack);
-      }
-
-      let {branchMap} = instrumenter.coverState;
-
-      Object
-        .keys(branchMap)
-        .map(key => branchMap[key] || [])
-        .forEach((br, i) => {
-          expect(br, `Expect the ${i}-th branches to deeply equal.`).to.eql(expectedCoverState.branchMap[i]);
-        });
-
-      done();
-    });
-
-  });
-
 });

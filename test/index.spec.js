@@ -1,0 +1,124 @@
+//
+
+import Mocha from 'mocha'
+let {Test, Suite} = Mocha;
+
+import {expect} from 'chai'
+
+import {getFixturesTest, extractCodeExpect} from './_helpers.js';
+
+import {Instrumenter, Reporter} from '../src/isparta';
+
+////
+
+const MAP_TYPES = [
+  {
+    name: 'statement',
+    get fullName() { return `${this.name}Map` },
+    getLocations: (loc) => [loc]
+  },
+  {
+    name: 'fn',
+    get fullName() { return `${this.name}Map` },
+    getLocations: (fn) => [fn.loc]
+  },
+  {
+    name: 'branch',
+    get fullName() { return `${this.name}Map` },
+    getLocations: (br) => br.locations
+  }
+];
+
+////
+
+let instumenterSuite = describe("Isparta instrumenter", function () {
+  before(generateSourceMapTest);
+
+  it('soulhd generate the tests', function () {
+    expect(instumenterSuite.suites.length).to.be.above(0);
+  });
+
+});
+
+function generateSourceMapTest(done) {
+
+  let instrumenter = new Instrumenter();
+  getFixturesTest().map((fixtureTest) => {
+
+    let {name, actual} = fixtureTest;
+
+    instrumenter.instrument(actual.code, actual.loc, (err) => {
+      if (err) { throw err; }
+
+      let fixtureSuite = Suite.create(instumenterSuite, `when ${name}`);
+      fixtureSuite.afterEach('display code snippet diff', displaySnippetError);
+
+      MAP_TYPES
+        .map(testCoverMaps(instrumenter.coverState, fixtureTest))
+        .reduce((coverTests, tests) => coverTests.concat(tests), [])
+        .forEach((test) => fixtureSuite.addTest(test));
+
+
+      done();
+    });
+
+
+  });
+
+
+}
+
+function displaySnippetError() {
+  if (!this.error) {
+    return;
+  }
+
+  let codeLines = this.error.codeLines;
+
+  this.error.expectedLocation.forEach((expectedLoc, i) => {
+    let actualLoc = this.error.actualLocation[i];
+    let expectCode = extractCodeExpect(codeLines, expectedLoc);
+    let actualCode = extractCodeExpect(codeLines, actualLoc);
+    //console.log('<<<<<<<< expectCode | ', expectCode);
+    //console.log('<<<<<<<< actualCode | ', actualCode);
+    expect(actualCode).to.equal(expectCode);
+  });
+
+}
+
+
+function testCoverMaps(maps, fixtureTest) {
+
+  var actualCodeLines = fixtureTest.actual.code.split('\n');
+
+  return function testCoverMap(type) {
+    let mapKey = `${type.name}Map`;
+    let map = values(maps[mapKey] || {});
+
+    return map.map((loc, i) => {
+
+      return new Test(`should localize the ${type.name}s`, locationIt);
+
+      ////
+
+      function locationIt() {
+
+        this.error = {
+          actualLocation: type.getLocations(loc),
+          expectedLocation: type.getLocations(fixtureTest.expectedCover.code[mapKey][i]),
+          codeLines: actualCodeLines
+        };
+
+        expect(loc).to.eql(fixtureTest.expectedCover.code[mapKey][i] || {},
+          `Expect the ${i}-th ${type.name}s to be deeply equal.`);
+
+        this.error = null;
+
+      }
+
+    });
+  }
+
+}
+
+function values(arr) { return Object.keys(arr).map(key => arr[key] || {}); }

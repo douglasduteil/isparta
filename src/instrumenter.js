@@ -1,6 +1,6 @@
 
 import istanbul from 'istanbul';
-import to5 from '6to5';
+import to5 from '6to5-core';
 
 import esprima from 'esprima';
 import escodegen from 'escodegen';

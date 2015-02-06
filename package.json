@@ -47,6 +47,6 @@
   },
   "scripts": {
     "dist": "6to5 --experimental src --out-dir lib",
-    "test": "mocha --compilers 6to5:./register"
+    "test": "mocha"
   }
 }

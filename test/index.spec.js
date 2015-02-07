@@ -4,6 +4,8 @@ import Mocha from 'mocha'
 let {Test, Suite} = Mocha;
 
 import {expect} from 'chai'
+import {appendSuffix as nth} from 'nth'
+
 
 import {getFixturesTest, extractCodeExpect} from './_helpers.js';
 
@@ -97,7 +99,7 @@ function testCoverMaps(maps, fixtureTest) {
 
     return map.map((loc, i) => {
 
-      return new Test(`should localize the ${type.name}s`, locationIt);
+      return new Test(`should localize the ${nth(i + 1)} ${type.name}`, locationIt);
 
       ////
 
@@ -110,7 +112,7 @@ function testCoverMaps(maps, fixtureTest) {
         };
 
         expect(loc).to.eql(fixtureTest.expectedCover.code[mapKey][i] || {},
-          `Expect the ${i}-th ${type.name}s to be deeply equal.`);
+          `Expect the ${nth(i + 1)} ${type.name}s to be deeply equal.`);
 
         this.error = null;
 

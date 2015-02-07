@@ -88,6 +88,8 @@ export class Instrumenter extends istanbul.Instrumenter {
         this._skipLocation(loc);
         return false;
       }
+      delete loc[k].source;
+      delete loc[k].name;
       lastLine = loc[k].line;
     });
 

@@ -31,7 +31,7 @@ nomnom.command('cover')
     help: 'the configuration file to use, defaults to .istanbul.yml'
   })
   .option('report', {
-    default: ['lcv'],
+    default: 'lcv',
     metavar: '<format>',
     list: true,
     help: `report format, defaults to ['lcv']`

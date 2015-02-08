@@ -1,6 +1,6 @@
 {
   "name": "isparta",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "A code coverage tool for ES6 (6to5)",
   "main": "./lib/isparta",
   "keywords": [

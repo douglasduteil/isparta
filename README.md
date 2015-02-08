@@ -20,12 +20,14 @@ $ npm install --save-dev douglasduteil/isparta
 
 ## Usage
 
-```bash
-isparta cover --report text  _mocha -- --reporter dot   
-```
-
-**Not all the istanbul command/options are available with isparta**
+**Not all the istanbul command/options are available with isparta**  
 **Consult `isparta -h` for more information**
+
+Here is an example to run a coverage over mocha tests  
+
+```bash
+6to5-node node_modules/.bin/isparta cover --report text --report html node_modules/.bin/_mocha -- --reporter dot   
+```
 
 ### With Karma
 

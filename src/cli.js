@@ -65,7 +65,7 @@ function coverCmd(opts) {
   let reporter = new Reporter(config);
 
   let { cmd } = opts;
-  let cmdArgs = opts['--'];
+  let cmdArgs = opts['--'] || [];
 
   if (!existsSync(cmd)) {
     try {

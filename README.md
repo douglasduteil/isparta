@@ -21,8 +21,7 @@ $ npm install --save-dev douglasduteil/isparta
 ## Usage
 
 ```bash
-isparta cover src/foo.es6.js
-istanbul report text-summary
+isparta cover --report text  _mocha -- --reporter dot   
 ```
 
 **Not all the istanbul command/options are available with isparta**

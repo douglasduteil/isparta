@@ -50,7 +50,7 @@ But can customize the babel options thanks to my [fork](https://github.com/dougl
 
 ```js
 
-var to5Options = { experimental: true };
+var babelOptions = { experimental: true };
 
 // [...]
 
@@ -62,7 +62,7 @@ coverageReporter: {
     '**/*.js': 'isparta'
   },
   instrumenterOptions: {
-    isparta: { to5 : to5Options }
+    isparta: { babel : babelOptions }
   }
 }
 ```

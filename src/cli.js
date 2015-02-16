@@ -23,7 +23,7 @@ nomnom.command('cover')
   .option('cmd', {
     required: true,
     position: 1,
-    help: 'ES6 js files to cover (using 6to5)'
+    help: 'ES6 js files to cover (using babel)'
   })
 
   .option('config', {

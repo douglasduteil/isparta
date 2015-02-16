@@ -1,6 +1,6 @@
 
 import istanbul from 'istanbul';
-import to5 from '6to5-core';
+import babel from 'babel-core';
 
 import esprima from 'esprima';
 import escodegen from 'escodegen';
@@ -10,9 +10,9 @@ import {SourceMapConsumer, SourceMapGenerator} from 'source-map';
 export class Instrumenter extends istanbul.Instrumenter {
 
   constructor(options = {}) {
-    this.to5Options = {
+    this.babelOptions = {
       sourceMap: true,
-      ...(options && options.to5 || {})
+      ...(options && options.babel || {})
     };
 
     istanbul.Instrumenter.call(this, options);
@@ -21,8 +21,8 @@ export class Instrumenter extends istanbul.Instrumenter {
 
   instrumentSync(code, fileName) {
 
-    let result = this._r = to5.transform(code, { ...this.to5Options, filename: fileName });
-    this._6to5Map = new SourceMapConsumer(result.map);
+    let result = this._r = babel.transform(code, { ...this.babelOptions, filename: fileName });
+    this._babelMap = new SourceMapConsumer(result.map);
 
     // PARSE
     let program = esprima.parse(result.code, {
@@ -83,7 +83,7 @@ export class Instrumenter extends istanbul.Instrumenter {
     var lastLine = 1;
 
     ['start', 'end'].forEach((k) => {
-      loc[k] = this._6to5Map.originalPositionFor(loc[k]);
+      loc[k] = this._babelMap.originalPositionFor(loc[k]);
       if (loc[k].source == null){
         this._skipLocation(loc);
         return false;

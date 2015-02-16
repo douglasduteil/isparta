@@ -1,6 +1,6 @@
 # isparta [![Build Status][travis-image]][travis-url] [![NPM version][npm-image]][npm-url]
 
-> Isparta is a code coverage tool for ES6 using the [6to5](https://github.com/6to5/6to5).
+> Isparta is a code coverage tool for ES6 using [babel](https://github.com/babel/babel).
 
 Its intention is to be used with [karma](http://karma-runner.github.io/) and [karma-coverage](https://github.com/karma-runner/karma-coverage), which provides code coverage reports using [istanbul](https://github.com/gotwarlost/istanbul).
 
@@ -26,7 +26,7 @@ $ npm install --save-dev douglasduteil/isparta
 Here is an example to run a coverage over mocha tests  
 
 ```bash
-6to5-node node_modules/.bin/isparta cover --report text --report html node_modules/.bin/_mocha -- --reporter dot   
+babel-node node_modules/.bin/isparta cover --report text --report html node_modules/.bin/_mocha -- --reporter dot   
 ```
 
 [douglasduteil/study-node-path-es6](https://github.com/douglasduteil/study-node-path-es6) demo the working cli
@@ -46,7 +46,7 @@ coverageReporter: {
 }
 ```
 
-But can customize the 6to5 options thanks to my [fork](https://github.com/douglasduteil/karma-coverage/tree/next)
+But can customize the babel options thanks to my [fork](https://github.com/douglasduteil/karma-coverage/tree/next)
 
 ```js
 

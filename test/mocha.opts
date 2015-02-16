@@ -1,1 +1,1 @@
---compilers 6to5:./register
+--compilers babel:./register

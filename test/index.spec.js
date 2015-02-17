@@ -110,7 +110,9 @@ function testCoverMaps(maps, fixtureTest) {
 
         this.error = {
           actualLocation: type.getLocations(loc),
-          expectedLocation: type.getLocations(fixtureTest.expectedCover.code[mapKey][i]),
+          expectedLocation: type.getLocations(
+            fixtureTest.expectedCover.code[mapKey][i] || {}
+          ) || [],
           codeLines: actualCodeLines
         };
 

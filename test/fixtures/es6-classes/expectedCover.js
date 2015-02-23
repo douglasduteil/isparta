@@ -1,23 +1,27 @@
 // Compiled to ./compiled.js
 
+const lostStatment = {
+  start: {line: 0, column: 0},
+  end: {line: 0, column: 0}
+};
+
 const skippedStatment = {
-  start: {line: 1, column: -15},
-  end: {line: 1, column: -15},
+  ...lostStatment,
   skip: true
 };
 
 function generateNSkipedStatement(n){
-  return Array.from(Array(n)).map(() =>  skippedStatment);
+  return Array.from(Array(n)).map(() => skippedStatment );
 }
 
 module.exports = {
-  statementMap: generateNSkipedStatement(8)
+  statementMap: []
+    .concat(generateNSkipedStatement(8))
     .concat([
       // 9th statement
       {
         start: {line: 3, column: 0},
         end: {line: 15, column: 1},
-        skip: undefined
       }
     ])
     .concat(generateNSkipedStatement(3))
@@ -25,20 +29,17 @@ module.exports = {
       // 13th statement
       {
         start: {line: 13, column: 4},
-        end: {line: 13, column: 20},
-        skip: undefined
+        end: {line: 13, column: 20}
       },
       // 14th statement
       {
         start: {line: 5, column: 4},
-        end: {line: 5, column: 45},
-        skip: undefined
+        end: {line: 5, column: 45}
       },
       // 15th statement
       {
         start: {line: 9, column: 4},
-        end: {line: 9, column: 19},
-        skip: undefined
+        end: {line: 9, column: 19}
       }
     ])
     .concat(generateNSkipedStatement(3))
@@ -46,71 +47,67 @@ module.exports = {
 
   fnMap: [
    {
-      name: '(anonymous_1)', line: 1,
+      name: '(anonymous_1)', line: 3,
       loc: {
-       ...skippedStatment
+       ...lostStatment
       },
-      skip: undefined
+      skip: true
     },
     {
-      name: '(anonymous_2)', line: 1,
+      name: '(anonymous_2)', line: 5,
       loc: {
-       ...skippedStatment
+       ...lostStatment
       },
-      skip: undefined
+      skip: true
     },
     {
-      name: '(anonymous_3)', line: 3,
+      name: '(anonymous_3)', line: 9,
       loc: {
         start: {line: 3, column: 10},
         end: {line: 3, column: 10}
-      },
-      skip: undefined
+      }
     },
     {
-      name: 'Animal', line: 1,
+      name: 'Animal', line: 10,
       loc: {
-        ...skippedStatment
+        ...lostStatment
       },
-      skip: undefined
+      skip: true
     },
     {
-      name: 'getName', line: 12,
+      name: 'getName', line: 16,
       loc: {
         start: {line: 12, column: 16},
         end: {line: 12, column: 19}
-      },
-      skip: undefined
+      }
     },
     {
-      name: 'sayHi', line: 4,
+      name: 'sayHi', line: 24,
       loc: {
         start: {line: 4, column: 7},
         end: {line: 4, column: 10}
-      },
-      skip: undefined
+      }
     },
     {
-      name: 'sayOther', line: 8,
+      name: 'sayOther', line: 31,
       loc: {
         start: {line: 8, column: 10},
         end: {line: 8, column: 13}
-      },
-      skip: undefined
+      }
     }
   ],
 
   branchMap: [
     {
-      line: 1, type: 'if',
+      line: 3, type: 'if',
       locations: [{...skippedStatment}, {...skippedStatment}]
     },
     {
-      line: 1, type: 'if',
+      line: 3, type: 'if',
       locations: [{...skippedStatment}, {...skippedStatment}]
     },
     {
-      line: 1, type: 'if',
+      line: 5, type: 'if',
       locations: [{...skippedStatment}, {...skippedStatment}]
     }
   ]

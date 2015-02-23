@@ -39,7 +39,6 @@ var Animal = (function () {
   return Animal;
 })();
 
-//export {Animal, Dog, Horse, Lama, Multiplier};
 exports.Animal = Animal;
 Object.defineProperty(exports, "__esModule", {
   value: true

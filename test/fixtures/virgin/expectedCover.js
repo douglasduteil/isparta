@@ -1,56 +1,51 @@
 // Compiled to
 
-// 0. "use strict";
-// 1.
-// 2. ONE.foo = function (bar) {
-// 3.   return baz(bar ? 0 : 1);
-// 4. };
+// 1. "use strict";
+// 2.
+// 3. ONE.foo = function (bar) {
+// 4.   return baz(bar ? 0 : 1);
+// 5. };
 
 
 module.exports = {
   statementMap: [
     {
-      // 2. ONE.foo = function (bar) {
-      // 3.   return baz(bar ? 0 : 1);
-      // 4. };
-      start: {line: 2, column: 0},
-      end: {line: 4, column: 2},
-      skip: undefined
+      // 3. ONE.foo = function (bar) {
+      // 4.   return baz(bar ? 0 : 1);
+      // 5. };
+      start: {line: 3, column: 0},
+      end: {line: 5, column: 2}
     },
     {
-      // 3.   return baz(bar ? 0 : 1);
-      start: {line: 3, column: 2},
-      end: {line: 3, column: 26},
-      skip: undefined
+      // 4.   return baz(bar ? 0 : 1);
+      start: {line: 4, column: 2},
+      end: {line: 4, column: 26}
     }
   ],
 
   fnMap: [
     {
-      // 2. ONE.foo = function (bar) {
-      name: '(anonymous_1)', line: 2,
+      // 3. ONE.foo = function (bar) {
+      name: '(anonymous_1)', line: 3,
       loc: {
-        start: {line: 2, column: 10},
-        end: {line: 2, column: 25}
-      },
-      skip: undefined
+        start: {line: 3, column: 10},
+        end: {line: 3, column: 25}
+      }
     }
   ],
 
   branchMap: [
     {
-      // 3.   return baz(bar ? 0 : 1);
-      line: 3, type: 'cond-expr',
+      // 4.   return baz(bar ? 0 : 1);
+      line: 4, type: 'cond-expr',
       locations: [
         {
-          start: {line: 3, column: 19},
-          end: {line: 3, column: 20},
-          skip: undefined
+          start: {line: 4, column: 19},
+          end: {line: 4, column: 20}
         },
         {
-          start: {line: 3, column: 23},
-          end: {line: 3, column: 24},
-          skip: undefined
+          start: {line: 4, column: 23},
+          end: {line: 4, column: 24}
         }
       ]
     }

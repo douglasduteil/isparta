@@ -1,5 +1,8 @@
 //
 
+import hideStack from 'hide-stack-frames-from'
+hideStack('mocha', 'babel-core');
+
 import Mocha from 'mocha'
 let {Test, Suite} = Mocha;
 
@@ -107,7 +110,9 @@ function testCoverMaps(maps, fixtureTest) {
 
         this.error = {
           actualLocation: type.getLocations(loc),
-          expectedLocation: type.getLocations(fixtureTest.expectedCover.code[mapKey][i]),
+          expectedLocation: type.getLocations(
+            fixtureTest.expectedCover.code[mapKey][i] || {}
+          ) || [],
           codeLines: actualCodeLines
         };
 

@@ -7,6 +7,8 @@ import escodegen from 'escodegen';
 
 import {SourceMapConsumer, SourceMapGenerator} from 'source-map';
 
+const POSITIONS = ['start', 'end'];
+
 export class Instrumenter extends istanbul.Instrumenter {
 
   constructor(options = {}) {
@@ -21,7 +23,8 @@ export class Instrumenter extends istanbul.Instrumenter {
 
   instrumentSync(code, fileName) {
 
-    let result = this._r = babel.transform(code, { ...this.babelOptions, filename: fileName });
+    let result = this._r = babel
+      .transform(code, { ...this.babelOptions, filename: fileName });
     this._babelMap = new SourceMapConsumer(result.map);
 
     // PARSE
@@ -33,67 +36,110 @@ export class Instrumenter extends istanbul.Instrumenter {
     });
 
     if (this.opts.preserveComments) {
-      program = escodegen.attachComments(program, program.comments, program.tokens);
+      program = escodegen
+        .attachComments(program, program.comments, program.tokens);
     }
 
     return this.instrumentASTSync(program, fileName, code);
   }
 
   getPreamble(sourceCode, emitUseStrict) {
-    let {statementMap, fnMap, branchMap} =  this.coverState;
 
-    Object
-      .keys(statementMap)
-      .map(key => statementMap[key] || [])
-      .forEach((loc) => {
-        this._fixLocation(loc);
-      });
-
-    Object
-      .keys(fnMap)
-      .map(key => fnMap[key] || [])
-      .forEach((fn) => {
-        fn.line = this._fixLocation(fn.loc);
-      });
-
-    Object
-      .keys(branchMap)
-      .map(key => branchMap[key] || [])
-      .forEach((br) => {
-        let brLine = br.line;
-        br.locations
-          .map((loc) => {
-            brLine = this._fixLocation(loc);
-          });
-        br.line = brLine;
-      });
+     [['s','statementMap'], ['f', 'fnMap'], ['b', 'branchMap']]
+    .forEach(([metricName, metricMapName]) => {
+      let [metrics, metricMap] = [
+        this.coverState[metricName],
+        this.coverState[metricMapName]
+      ];
+      let transformFctName = `_${metricMapName}Transformer`;
+      let transformedMetricMap = this[transformFctName](metricMap, metrics)
+      this.coverState[metricMapName] = transformedMetricMap;
+    })
 
     return super.getPreamble(sourceCode, emitUseStrict);
   }
 
-  _skipLocation(location) {
-    location.start = { line: 1, column: 0 };
-    location.end = { line: 1, column: 0 };
-    location.skip = true;
+  ////
 
-    return location;
+   _statementMapTransformer(metrics){
+    return Object.keys(metrics)
+      .map((index) => metrics[index])
+      .map((statementMeta) => {
+        let [location] = this._getMetricOriginalLocations([statementMeta]);
+        return location;
+      })
+      .reduce(this._arrayToArrayLikeObject, {});
   }
 
-  _fixLocation(loc) {
-    var lastLine = 1;
+  _fnMapTransformer(metrics){
+    return Object.keys(metrics)
+      .map((index) => metrics[index])
+      .map((fnMeta) => {
+        let [{start, end, skip}] =
+          this._getMetricOriginalLocations([fnMeta.loc]);
 
-    ['start', 'end'].forEach((k) => {
-      loc[k] = this._babelMap.originalPositionFor(loc[k]);
-      if (loc[k].source == null){
-        this._skipLocation(loc);
-        return false;
-      }
-      delete loc[k].source;
-      delete loc[k].name;
-      lastLine = loc[k].line;
-    });
+        // Force remove the last skip key
+        delete fnMeta.skip;
+        skip = skip ? {skip: skip} : {};
 
-    return lastLine;
+        return {...fnMeta, ...{loc: {start, end}, ...skip}};
+      })
+      .reduce(this._arrayToArrayLikeObject, {});;
   }
+
+  _branchMapTransformer(metrics){
+    return Object.keys(metrics)
+      .map((index) => metrics[index])
+      .map((branchMeta) => {
+        return {
+          ...branchMeta,
+          ...{
+            locations: this._getMetricOriginalLocations(branchMeta.locations)
+          }
+        };
+      })
+      .reduce(this._arrayToArrayLikeObject, {});;
+  }
+
+  ////
+
+  _getMetricOriginalLocations(metricLocations = []){ let o = { line: 0, column: 0};
+    return metricLocations
+      .map((generatedPositions) => {
+        return [
+          this._getOriginalPositionsFor(generatedPositions),
+          generatedPositions
+        ]
+      })
+      .map(([{start, end}, {start: generatedStart, end: generatedEnd}]) => {
+        let postitions = [start.line, start.column, end.line, end.column];
+        let isValid = postitions.reduce((bool, n) => {
+          bool &= n !== null; return bool;
+        }, 1);
+
+        return isValid
+          ? { start, end }
+          : { start: o, end: o, skip: true };
+      })
+  }
+
+  _getOriginalPositionsFor(generatedPositions = { start : {}, end : {} }){
+    return POSITIONS
+      .map((position) => [generatedPositions[position], position])
+      .reduce((originalPositions, [generatedPosition, position]) => {
+        let originalPosition = this._babelMap.originalPositionFor(generatedPosition);
+        // remove extra keys
+        delete originalPosition.name;
+        delete originalPosition.source;
+        originalPositions[position] = originalPosition;
+        return originalPositions;
+      }, {});
+  }
+
+  _arrayToArrayLikeObject(arrayLikeObject, item, index) {
+    arrayLikeObject[index + 1] = item;
+    return arrayLikeObject;
+  };
+
 }
 

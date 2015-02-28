@@ -1,6 +1,6 @@
 
 import istanbul from 'istanbul';
-import babel from 'babel-core';
+import * as babel from 'babel-core';
 
 import esprima from 'esprima';
 import escodegen from 'escodegen';

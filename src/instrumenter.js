@@ -1,6 +1,6 @@
 
 import istanbul from 'istanbul';
-import babel from 'babel-core';
+import {transform as babelTransform} from 'babel-core';
 
 import esprima from 'esprima';
 import escodegen from 'escodegen';
@@ -23,8 +23,8 @@ export class Instrumenter extends istanbul.Instrumenter {
 
   instrumentSync(code, fileName) {
 
-    let result = this._r = babel
-      .transform(code, { ...this.babelOptions, filename: fileName });
+    let result = this._r =
+      babelTransform(code, { ...this.babelOptions, filename: fileName });
     this._babelMap = new SourceMapConsumer(result.map);
 
     // PARSE

@@ -12,13 +12,14 @@ const POSITIONS = ['start', 'end'];
 export class Instrumenter extends istanbul.Instrumenter {
 
   constructor(options = {}) {
+    super();
+
+    istanbul.Instrumenter.call(this, options);
+
     this.babelOptions = {
       sourceMap: true,
       ...(options && options.babel || {})
     };
-
-    istanbul.Instrumenter.call(this, options);
-
   }
 
   instrumentSync(code, fileName) {

@@ -10,15 +10,35 @@ const skippedStatment = {
   skip: true
 };
 
+////
+
 function generateNSkipedStatement(n){
   return Array.from(Array(n)).map(() => skippedStatment );
 }
 
+function generateNSkipedFunction(...lostFnData){
+  return lostFnData.map(fnData => {
+    return {
+      ...fnData, loc: {...lostStatment}, skip: true
+    };
+  });
+}
+
+function generateNSkipedBranch(...lostBranchData){
+  return lostBranchData.map(branchData => {
+    return {
+      ...branchData, locations: [{...skippedStatment}, {...skippedStatment}]
+    };
+  });
+}
+
+////
+
 module.exports = {
   statementMap: []
-    .concat(generateNSkipedStatement(8))
+    .concat(generateNSkipedStatement(19))
     .concat([
-      // 9th statement
+      // 20th statement
       {
         start: {line: 3, column: 0},
         end: {line: 15, column: 1},
@@ -26,89 +46,83 @@ module.exports = {
     ])
     .concat(generateNSkipedStatement(3))
     .concat([
-      // 13th statement
-      {
-        start: {line: 13, column: 4},
-        end: {line: 13, column: 20}
-      },
-      // 14th statement
+      // 24th statement
       {
         start: {line: 5, column: 4},
         end: {line: 5, column: 45}
       },
-      // 15th statement
+      // 25th statement
       {
         start: {line: 9, column: 4},
         end: {line: 9, column: 19}
+      },
+      // 26th statement
+      {
+        start: {line: 13, column: 4},
+        end: {line: 13, column: 20}
       }
     ])
-    .concat(generateNSkipedStatement(3))
+    .concat(generateNSkipedStatement(2))
   ,
 
-  fnMap: [
-   {
-      name: '(anonymous_1)', line: 3,
-      loc: {
-       ...lostStatment
+  fnMap: []
+    .concat(generateNSkipedFunction(
+      {name: '(anonymous_1)', line: 3},
+      {name: '(anonymous_2)', line: 5},
+      {name: 'defineProperties', line: 5},
+      {name: '(anonymous_4)', line: 5}
+    ))
+    .concat([
+      // 5th fn
+      {
+        name: '(anonymous_5)', line: 12,
+        loc: {
+          start: {line: 3, column: 10},
+          end: {line: 3, column: 10}
+        }
+      }
+    ])
+    .concat(generateNSkipedFunction(
+      {name: 'Animal', line: 13}
+    ))
+    .concat([
+      // 7th fn
+      {
+        name: 'sayHi', line: 19,
+        loc: {
+          start: {line: 4, column: 7},
+          end: {line: 4, column: 10}
+        }
       },
-      skip: true
-    },
-    {
-      name: '(anonymous_2)', line: 5,
-      loc: {
-       ...lostStatment
+      // 8th fn
+      {
+        name: 'sayOther', line: 24,
+        loc: {
+          start: {line: 8, column: 10},
+          end: {line: 8, column: 13}
+        }
       },
-      skip: true
-    },
-    {
-      name: '(anonymous_3)', line: 9,
-      loc: {
-        start: {line: 3, column: 10},
-        end: {line: 3, column: 10}
+      // 9th fn
+      {
+        name: 'getName', line: 29,
+        loc: {
+          start: {line: 12, column: 16},
+          end: {line: 12, column: 19}
+        }
       }
-    },
-    {
-      name: 'Animal', line: 10,
-      loc: {
-        ...lostStatment
-      },
-      skip: true
-    },
-    {
-      name: 'getName', line: 16,
-      loc: {
-        start: {line: 12, column: 16},
-        end: {line: 12, column: 19}
-      }
-    },
-    {
-      name: 'sayHi', line: 24,
-      loc: {
-        start: {line: 4, column: 7},
-        end: {line: 4, column: 10}
-      }
-    },
-    {
-      name: 'sayOther', line: 31,
-      loc: {
-        start: {line: 8, column: 10},
-        end: {line: 8, column: 13}
-      }
-    }
-  ],
+    ])
+  ,
 
-  branchMap: [
-    {
-      line: 3, type: 'if',
-      locations: [{...skippedStatment}, {...skippedStatment}]
-    },
-    {
-      line: 3, type: 'if',
-      locations: [{...skippedStatment}, {...skippedStatment}]
-    },
-    {
-      line: 5, type: 'if',
-      locations: [{...skippedStatment}, {...skippedStatment}]
-    }
-  ]
+  branchMap: generateNSkipedBranch(
+    // 1th branch
+    {line: 3, type: 'if'},
+    // 2th branch
+    {line: 5, type: 'binary-expr'},
+    // 3th branch
+    {line: 5, type: 'if'},
+    // 4th branch
+    {line: 5, type: 'if'},
+    // 5th branch
+    {line: 5, type: 'if'}
+  )
 };

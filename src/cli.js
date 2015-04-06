@@ -1,6 +1,6 @@
 //
 
-import {existsSync, writeFileSync} from 'fs';
+import {existsSync, writeFileSync, statSync, readdirSync} from 'fs';
 import path from 'path';
 import Module from 'module';
 
@@ -40,16 +40,46 @@ nomnom.command('cover')
     metavar: '<path>',
     help: 'the root path to look for files to instrument, defaults to .'
   })
+  .option('include', {
+    default: ['**/*.js'],
+    metavar: '<include-pattern>',
+    abbr: 'i',
+    help: 'one or more fileset patterns e.g. \'**/*.js\''
+  })
   .option('verbose', {
     flag: true,
     abbr: 'v',
     help: 'verbose mode'
   })
 
-  .callback(coverCmd)
+  .callback(opts => {
+
+    let args = opts._,
+        files = [],
+        cmdArgs = [];
+
+    args.forEach(arg => {
+
+        let file = lookupFiles(arg);
+        if (file) files = files.concat(file);
+    });
+
+    opts.include = [opts.include];
+    opts.include = opts.include.concat(files);
+
+    coverCmd(opts);
+  });
 ;
 
 nomnom.nom();
+
+function lookupFiles (path) {
+
+  if (existsSync(path)) {
+    let stat = statSync(path);
+    if (stat.isFile()) return path;
+  }
+}
 
 function callback(err){
   if (err){
@@ -135,7 +165,7 @@ function coverCmd(opts) {
 
     matcherFor({
       root: config.instrumentation.root() || process.cwd(),
-      includes: [ '**/*.js' ],
+      includes: opts.include,
       excludes: excludes
     }, (err, matchFn) => {
       if (err){

@@ -53,6 +53,7 @@
   "scripts": {
     "dist": "babel src --out-dir lib",
     "watch": "npm run dist -- -w",
-    "test": "mocha"
+    "test": "mocha",
+    "prepublish": "npm run dist"
   }
 }

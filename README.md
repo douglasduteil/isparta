@@ -50,7 +50,8 @@ But can customize the babel options thanks to my [fork](https://github.com/dougl
 
 ```js
 
-var babelOptions = { experimental: true };
+// Note that you ".babelrc" will be the default options for babel.
+var babelMoreOptions = { stage: 0 };
 
 // [...]
 
@@ -62,7 +63,7 @@ coverageReporter: {
     '**/*.js': 'isparta'
   },
   instrumenterOptions: {
-    isparta: { babel : babelOptions }
+    isparta: { babel : babelMoreOptions }
   }
 }
 ```

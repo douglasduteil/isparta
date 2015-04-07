@@ -1,6 +1,6 @@
 //
 
-import {existsSync, writeFileSync} from 'fs';
+import {existsSync, readFileSync, writeFileSync} from 'fs';
 import path from 'path';
 import Module from 'module';
 
@@ -62,6 +62,7 @@ function callback(err){
 function coverCmd(opts) {
 
   let config = overrideConfigWith(opts);
+  let babelConfig = getBabelConfig();
   let reporter = new Reporter(config);
 
   let { cmd } = opts;
@@ -111,6 +112,16 @@ function coverCmd(opts) {
     return configuration.loadFile(opts.config, overrides);
   }
 
+  function getBabelConfig() {
+    const babelConfigPath = path.join(process.cwd(), '.babelrc');
+
+    if (existsSync(babelConfigPath)) {
+      return JSON.parse(readFileSync(babelConfigPath, 'utf8'));
+    }
+
+    return {};
+  }
+
   function enableHooks() {
     opts.reportingDir = path.resolve(config.reporting.dir());
     mkdirp.sync(opts.reportingDir);
@@ -150,7 +161,7 @@ function coverCmd(opts) {
 
   function prepareCoverage(matchFn) {
     let coverageVar = `$$cov_${Date.now()}$$`;
-    let instrumenter = new Instrumenter({ coverageVariable : coverageVar });
+    let instrumenter = new Instrumenter({ coverageVariable : coverageVar, babel : babelConfig });
     let transformer = instrumenter.instrumentSync.bind(instrumenter);
 
     hook.hookRequire(matchFn, transformer, { verbose : opts.verbose });

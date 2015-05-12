@@ -15,7 +15,7 @@ $ npm install --save-dev douglasduteil/karma-coverage#next
 Isparta can be installed using
 
 ```sh
-$ npm install --save-dev douglasduteil/isparta
+$ npm install --save-dev isparta
 ```
 
 ## Usage

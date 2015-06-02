@@ -39,7 +39,7 @@ const MAP_TYPES = [
 let instumenterSuite = describe("Isparta instrumenter", function () {
   before(generateSourceMapTest);
 
-  it('soulhd generate the tests', function () {
+  it('should generate the tests', function () {
     expect(instumenterSuite.suites.length).to.be.above(0);
   });
 

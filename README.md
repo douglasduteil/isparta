@@ -6,7 +6,7 @@ Its intention is to be used with [karma](http://karma-runner.github.io/) and [ka
 
 ## Installation
 
-For the moment, a custom fork of karma-coverage needs to be installed which supports isparta is an instrumenter.
+For the moment, a custom fork of karma-coverage needs to be installed which supports isparta as an instrumenter.
 
 ```sh
 $ npm install --save-dev douglasduteil/karma-coverage#next

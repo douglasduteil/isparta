@@ -2,7 +2,6 @@
 
 import {existsSync, writeFileSync, statSync, readdirSync} from 'fs';
 import path from 'path';
-import Module from 'module';
 
 //
 import which from 'which';
@@ -182,6 +181,7 @@ function coverCmd(opts) {
     let coverageVar = `$$cov_${Date.now()}$$`;
     let instrumenter = new Instrumenter({ coverageVariable : coverageVar });
     let transformer = instrumenter.instrumentSync.bind(instrumenter);
+    let exitCode = 0;
 
     hook.hookRequire(matchFn, transformer, { verbose : opts.verbose });
 
@@ -192,6 +192,9 @@ function coverCmd(opts) {
     }
 
     process.once('exit', () => {
+      if (exitCode) {
+        process.exit(exitCode);
+      }
       let file = path.resolve(opts.reportingDir, 'coverage.json');
       let cov, collector;
 
@@ -234,11 +237,15 @@ function coverCmd(opts) {
   }
 
   function runCommandFn() {
-    process.argv = ["node", cmd].concat(cmdArgs);
+    var nodeArgs = [cmd].concat(cmdArgs);
     if (opts.verbose) {
-      console.log('Running: ' + process.argv.join(' '));
+      console.log('Running: node ' + nodeArgs.join(' '));
     }
-    process.env.running_under_istanbul=1;
-    Module.runMain(cmd, null, true);
+    process.env.running_under_istanbul = 1;
+    require('child_process')
+      .spawn('node', nodeArgs, { stdio: 'inherit' })
+      .on('exit', function(code) {
+        exitCode = code;
+      });
   }
 }

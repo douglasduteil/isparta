@@ -1,4 +1,6 @@
 import * as istanbul from 'istanbul';
+import { Instrumenter } from './instrumenter';
+import { version } from '../package.json';
 
 for (var key in istanbul) {
 	if (istanbul.hasOwnProperty(key)) {
@@ -6,5 +8,5 @@ for (var key in istanbul) {
 	}
 }
 
-export {Instrumenter} from './instrumenter';
-export {version} from '../package.json';
+exports.Instrumenter = Instrumenter;
+exports.version = version;

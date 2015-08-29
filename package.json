@@ -33,7 +33,7 @@
   },
   "license": "WTFPL",
   "dependencies": {
-    "babel-core": "^5.0.4",
+    "babel-core": "^5.8.23",
     "escodegen": "^1.6.1",
     "esprima": "^2.1.0",
     "istanbul": "^0.3.13",
@@ -44,7 +44,7 @@
     "which": "^1.0.9"
   },
   "devDependencies": {
-    "babel": "^5.0.4",
+    "babel": "^5.8.23",
     "chai": "^2.2.0",
     "hide-stack-frames-from": "^1.0.0",
     "mocha": "^2.2.1",

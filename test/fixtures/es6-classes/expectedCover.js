@@ -67,15 +67,15 @@ module.exports = {
 
   fnMap: []
     .concat(generateNSkipedFunction(
-      {name: '(anonymous_1)', line: 3},
-      {name: '(anonymous_2)', line: 5},
-      {name: 'defineProperties', line: 5},
-      {name: '(anonymous_4)', line: 5}
+      {name: '(anonymous_1)', line: 9},
+      {name: 'defineProperties', line: 9},
+      {name: '(anonymous_3)', line: 9},
+      {name: '_classCallCheck', line: 11}
     ))
     .concat([
       // 5th fn
       {
-        name: '(anonymous_5)', line: 12,
+        name: '(anonymous_5)', line: 13,
         loc: {
           start: {line: 3, column: 10},
           end: {line: 3, column: 10}
@@ -83,12 +83,12 @@ module.exports = {
       }
     ])
     .concat(generateNSkipedFunction(
-      {name: 'Animal', line: 13}
+      {name: 'Animal', line: 14}
     ))
     .concat([
       // 7th fn
       {
-        name: 'sayHi', line: 19,
+        name: 'sayHi', line: 20,
         loc: {
           start: {line: 4, column: 7},
           end: {line: 4, column: 10}
@@ -96,7 +96,7 @@ module.exports = {
       },
       // 8th fn
       {
-        name: 'sayOther', line: 24,
+        name: 'sayOther', line: 25,
         loc: {
           start: {line: 8, column: 10},
           end: {line: 8, column: 13}
@@ -104,7 +104,7 @@ module.exports = {
       },
       // 9th fn
       {
-        name: 'getName', line: 29,
+        name: 'getName', line: 30,
         loc: {
           start: {line: 12, column: 16},
           end: {line: 12, column: 19}
@@ -115,14 +115,14 @@ module.exports = {
 
   branchMap: generateNSkipedBranch(
     // 1th branch
-    {line: 3, type: 'if'},
+    {line: 9, type: 'binary-expr'},
     // 2th branch
-    {line: 5, type: 'binary-expr'},
+    {line: 9, type: 'if'},
     // 3th branch
-    {line: 5, type: 'if'},
+    {line: 9, type: 'if'},
     // 4th branch
-    {line: 5, type: 'if'},
+    {line: 9, type: 'if'},
     // 5th branch
-    {line: 5, type: 'if'}
+    {line: 11, type: 'if'}
   )
 };

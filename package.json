@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "babel": "^5.8.23",
-    "chai": "^2.2.0",
+    "chai": "^3.2.0",
     "hide-stack-frames-from": "^1.0.0",
     "mocha": "^2.2.1",
     "nth": "^0.1.2"

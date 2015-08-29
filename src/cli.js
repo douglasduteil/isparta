@@ -191,7 +191,10 @@ function coverCmd(opts) {
       process.once('SIGINT', process.exit);
     }
 
-    process.once('exit', () => {
+    process.once('exit', (code) => {
+      if (code) {
+        process.exit(code);
+      }
       let file = path.resolve(opts.reportingDir, 'coverage.json');
       let cov, collector;
 

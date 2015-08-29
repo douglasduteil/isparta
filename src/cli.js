@@ -43,6 +43,7 @@ nomnom.command('cover')
   .option('include', {
     default: ['**/*.js'],
     metavar: '<include-pattern>',
+    list: true,
     abbr: 'i',
     help: 'one or more fileset patterns e.g. \'**/*.js\''
   })
@@ -64,7 +65,6 @@ nomnom.command('cover')
         if (file) files = files.concat(file);
     });
 
-    opts.include = [opts.include];
     opts.include = opts.include.concat(files);
 
     coverCmd(opts);
@@ -183,7 +183,7 @@ function coverCmd(opts) {
     let instrumenter = new Instrumenter({ coverageVariable : coverageVar });
     let transformer = instrumenter.instrumentSync.bind(instrumenter);
 
-    hook.hookRequire(matchFn, transformer, { verbose : opts.verbose });
+    hook.hookRequire(matchFn, transformer, Object.assign({ verbose : opts.verbose }, config.instrumentation.config));
 
     global[coverageVar] = {};
 

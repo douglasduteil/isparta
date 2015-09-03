@@ -5,6 +5,7 @@ import path from 'path';
 import Module from 'module';
 
 //
+import assign from 'object-assign';
 import which from 'which';
 import mkdirp from 'mkdirp';
 import partial from 'lodash.partial';
@@ -183,7 +184,7 @@ function coverCmd(opts) {
     let instrumenter = new Instrumenter({ coverageVariable : coverageVar });
     let transformer = instrumenter.instrumentSync.bind(instrumenter);
 
-    hook.hookRequire(matchFn, transformer, Object.assign({ verbose : opts.verbose }, config.instrumentation.config));
+    hook.hookRequire(matchFn, transformer, assign({ verbose : opts.verbose }, config.instrumentation.config));
 
     global[coverageVar] = {};
 

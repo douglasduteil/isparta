@@ -92,7 +92,7 @@ function callback(err){
 function coverCmd(opts) {
 
   let config = overrideConfigWith(opts);
-  let reporter = new Reporter(config);
+  let reporter = new Reporter(config, _path.resolve('./' + config.reporting.dir()));
 
   let { cmd } = opts;
   let cmdArgs = opts['--'] || [];

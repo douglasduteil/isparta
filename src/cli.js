@@ -93,7 +93,8 @@ function callback(err){
 function coverCmd(opts) {
 
   let config = overrideConfigWith(opts);
-  let reporter = new Reporter(config);
+  let istanbulCoveragePath = path.resolve(config.reporting.dir());
+  let reporter = new Reporter(config, istanbulCoveragePath);
 
   let { cmd } = opts;
   let cmdArgs = opts['--'] || [];

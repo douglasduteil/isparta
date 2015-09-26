@@ -45,10 +45,13 @@ let instumenterSuite = describe("Isparta instrumenter", function () {
 
 });
 
-function generateSourceMapTest(done) {
+function generateSourceMapTest(allDone) {
 
   let instrumenter = new Instrumenter();
-  getFixturesTest().map((fixtureTest) => {
+  const fixturesToTest = getFixturesTest();
+  const done = after(fixturesToTest.length, allDone);
+
+  fixturesToTest.map((fixtureTest) => {
 
     let {name, actual} = fixtureTest;
 
@@ -66,8 +69,6 @@ function generateSourceMapTest(done) {
 
       done();
     });
-
-
   });
 
 
@@ -128,4 +129,10 @@ function testCoverMaps(maps, fixtureTest) {
 
 }
 
+//
+
+// Minimal Lodash util functions
 function values(arr) { return Object.keys(arr).map(key => arr[key] || {}); }
+function after(n, func) { return function () {
+  if (--n < 1) { return func.apply(this, arguments); }
+};}

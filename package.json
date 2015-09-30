@@ -39,7 +39,7 @@
     "istanbul": "^0.3.13",
     "lodash.partial": "^3.1.0",
     "mkdirp": "^0.5.0",
-    "nomnom": "douglasduteil/nomnom#next",
+    "nomnomnomnom": "^2.0.0",
     "object-assign": "^4.0.1",
     "source-map": "^0.4.2",
     "which": "^1.0.9"

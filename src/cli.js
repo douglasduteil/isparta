@@ -9,7 +9,7 @@ import assign from 'object-assign';
 import which from 'which';
 import mkdirp from 'mkdirp';
 import partial from 'lodash.partial';
-import nomnom from 'nomnom';
+import nomnom from 'nomnomnomnom';
 import {hook, Collector, Reporter, matcherFor, config as configuration} from 'istanbul';
 import {Instrumenter} from './instrumenter';
 

@@ -18,6 +18,12 @@ Isparta can be installed using
 $ npm install --save-dev isparta
 ```
 
+Isparta relies on babel for ES6 transpilation. Install it using
+
+```sh
+$ npm install --save-dev babel-core
+```
+
 ## Usage
 
 **Not all the istanbul command/options are available with isparta**  

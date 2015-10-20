@@ -26,7 +26,7 @@ $ npm install --save-dev isparta
 Here is an example to run a coverage over mocha tests  
 
 ```bash
-babel-node node_modules/.bin/isparta cover --report text --report html node_modules/.bin/_mocha -- --reporter dot   
+babel-node node_modules/isparta/bin/isparta cover --report text --report html node_modules/mocha/bin/_mocha -- --reporter dot   
 ```
 
 [douglasduteil/study-node-path-es6](https://github.com/douglasduteil/study-node-path-es6) demo the working cli

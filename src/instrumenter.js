@@ -76,16 +76,19 @@ export class Instrumenter extends istanbul.Instrumenter {
     return Object.keys(metrics)
       .map((index) => metrics[index])
       .map((fnMeta) => {
-        let [{start, end, skip}] =
-          this._getMetricOriginalLocations([fnMeta.loc]);
+        let [loc] = this._getMetricOriginalLocations([fnMeta.loc]);
 
         // Force remove the last skip key
-        delete fnMeta.skip;
-        skip = skip ? {skip: skip} : {};
+        if (fnMeta.skip === undefined) {
+          delete fnMeta.skip;
+          if (loc.skip !== undefined) {
+            fnMeta.skip = loc.skip;
+          }
+        }
 
-        return {...fnMeta, ...{loc: {start, end}, ...skip}};
+        return {...fnMeta, loc};
       })
-      .reduce(this._arrayToArrayLikeObject, {});;
+      .reduce(this._arrayToArrayLikeObject, {});
   }
 
   _branchMapTransformer(metrics){
@@ -99,12 +102,14 @@ export class Instrumenter extends istanbul.Instrumenter {
           }
         };
       })
-      .reduce(this._arrayToArrayLikeObject, {});;
+      .reduce(this._arrayToArrayLikeObject, {});
   }
 
   ////
 
-  _getMetricOriginalLocations(metricLocations = []){ let o = { line: 0, column: 0};
+  _getMetricOriginalLocations(metricLocations = []){
+    let o = { line: 0, column: 0};
+
     return metricLocations
       .map((generatedPositions) => {
         return [
@@ -112,14 +117,17 @@ export class Instrumenter extends istanbul.Instrumenter {
           generatedPositions
         ]
       })
-      .map(([{start, end}, {start: generatedStart, end: generatedEnd}]) => {
+      .map(([{start, end}, generatedPosition]) => {
         let postitions = [start.line, start.column, end.line, end.column];
-        let isValid = postitions.reduce((bool, n) => {
-          bool &= n !== null; return bool;
-        }, 1);
+        let isValid = postitions.every((n) => n !== null);
+
+        // Matches behavior in _fnMapTransformer above.
+        if (generatedPosition.skip === undefined) {
+          delete generatedPosition.skip;
+        }
 
         return isValid
-          ? { start, end }
+          ? { ...generatedPosition, start, end }
           : { start: o, end: o, skip: true };
       })
   }

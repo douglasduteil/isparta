@@ -19,7 +19,7 @@ function generateNSkipedStatement(n){
 function generateNSkipedFunction(...lostFnData){
   return lostFnData.map(fnData => {
     return {
-      ...fnData, loc: {...lostStatment}, skip: true
+      ...fnData, loc: {...skippedStatment}, skip: true
     };
   });
 }

@@ -31,15 +31,28 @@ nomnom.command('cover')
     metavar: '<path-to-config>',
     help: 'the configuration file to use, defaults to .istanbul.yml'
   })
+  .option('default-excludes', {
+    default: true,
+    flag: true,
+    help: 'apply default excludes [ **/node_modules/**, **/test/**, **/tests/** ]'
+  })
+  .option('excludes', {
+    abbr: 'x',
+    default: [],
+    help: 'one or more fileset patterns e.g. "**/vendor/**"',
+    list: true,
+    metavar: '<exclude-pattern>'
+  })
   .option('report', {
     default: 'lcv',
     metavar: '<format>',
     list: true,
-    help: `report format, defaults to ['lcv']`
+    help: 'report format'
   })
   .option('root', {
+    default: '.',
     metavar: '<path>',
-    help: 'the root path to look for files to instrument, defaults to .'
+    help: 'the root path to look for files to instrument'
   })
   .option('include', {
     default: ['**/*.js'],
@@ -54,8 +67,9 @@ nomnom.command('cover')
     help: 'verbose mode'
   })
   .option('include-all-sources', {
+    default: false,
     flag: true,
-    help: 'include-all-sources'
+    help: 'instrument all unused sources after running tests'
   })
 
   .callback(opts => {
@@ -122,14 +136,16 @@ function coverCmd(opts) {
   ////
 
   function overrideConfigWith(opts){
-
+    console.dir(opts, {colors: true})
     let overrides = {
       verbose: opts.verbose,
       instrumentation: {
         root: opts.root,
         'default-excludes': opts['default-excludes'],
-        excludes: opts.x,
+        excludes: opts.excludes,
         'include-all-sources': opts['include-all-sources'],
+        // preload-sources is deprecated
+        // TODO(douglasduteil): remove this option
         'preload-sources': opts['preload-sources']
       },
       reporting: {

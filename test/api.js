@@ -7,6 +7,6 @@ const isparta = require('../');
 
 describe('API', function () {
   it('should include all the public istanbul symbols', function () {
-    expect(isparta).to.contain.all.keys(istanbul);
+    expect(istanbul).to.contain.all.keys(isparta);
   });
 });

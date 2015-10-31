@@ -1,3 +1,3 @@
-export * as istanbul from 'istanbul';
+export * from 'istanbul';
 export {Instrumenter} from './instrumenter';
-export {version} from '../package.json';
+export {VERSION} from '../package.json';

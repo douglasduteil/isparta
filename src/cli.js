@@ -136,7 +136,6 @@ function coverCmd(opts) {
   ////
 
   function overrideConfigWith(opts){
-    console.dir(opts, {colors: true})
     let overrides = {
       verbose: opts.verbose,
       instrumentation: {

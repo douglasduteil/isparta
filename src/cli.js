@@ -53,6 +53,10 @@ nomnom.command('cover')
     abbr: 'v',
     help: 'verbose mode'
   })
+  .option('include-all-sources', {
+    flag: true,
+    help: 'include-all-sources'
+  })
 
   .callback(opts => {
 

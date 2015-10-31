@@ -186,7 +186,8 @@ function coverCmd(opts) {
 
     matcherFor({
       root: config.instrumentation.root() || process.cwd(),
-      includes: opts.include,
+      includes: opts.includes || config.instrumentation.extensions()
+        .map((ext) => '**/*' + ext),
       excludes: excludes
     }, (err, matchFn) => {
       if (err){

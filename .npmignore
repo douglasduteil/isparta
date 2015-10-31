@@ -1,7 +1,0 @@
-src/
-test/
-.editorconfig
-.babelrc
-.travis.yml
-.gitignore
-screenshot.png

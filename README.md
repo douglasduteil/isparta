@@ -4,6 +4,8 @@
 
 Its intention is to be used with [karma](http://karma-runner.github.io/) and [karma-coverage](https://github.com/karma-runner/karma-coverage), which provides code coverage reports using [istanbul](https://github.com/gotwarlost/istanbul).
 
+[CHANGELOG](https://github.com/douglasduteil/isparta/releases)
+
 ## Installation
 
 For the moment, a custom fork of karma-coverage needs to be installed which supports isparta as an instrumenter.

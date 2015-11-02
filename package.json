@@ -37,7 +37,7 @@
   },
   "license": "WTFPL",
   "dependencies": {
-    "babel-core": "^5.8.25",
+    "babel-core": "^6.0.0",
     "escodegen": "^1.6.1",
     "esprima": "^2.1.0",
     "istanbul": "^0.4.0",
@@ -49,7 +49,9 @@
     "which": "^1.0.9"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
+    "babel-cli": "^6.0.0",
+    "babel-preset-es2015": "^6.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.0.0",
     "chai": "^3.2.0",
     "hide-stack-frames-from": "^1.0.0",
     "mocha": "^2.2.1",

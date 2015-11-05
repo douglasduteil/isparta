@@ -32,7 +32,6 @@ nomnom.command('cover')
     help: 'the configuration file to use, defaults to .istanbul.yml'
   })
   .option('default-excludes', {
-    default: true,
     flag: true,
     help: 'apply default excludes [ **/node_modules/**, **/test/**, **/tests/** ]'
   })
@@ -50,7 +49,6 @@ nomnom.command('cover')
     help: 'report format'
   })
   .option('root', {
-    default: '.',
     metavar: '<path>',
     help: 'the root path to look for files to instrument'
   })
@@ -67,7 +65,6 @@ nomnom.command('cover')
     help: 'verbose mode'
   })
   .option('include-all-sources', {
-    default: false,
     flag: true,
     help: 'instrument all unused sources after running tests'
   })

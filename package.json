@@ -37,7 +37,9 @@
   },
   "license": "WTFPL",
   "dependencies": {
-    "babel-core": "^6.0.0",
+    "babel-core": "^6.1.2",
+    "babel-preset-es2015": "^6.1.2",
+    "babel-preset-stage-0": "^6.1.2",
     "escodegen": "^1.6.1",
     "esprima": "^2.1.0",
     "istanbul": "^0.4.0",
@@ -49,16 +51,15 @@
     "which": "^1.0.9"
   },
   "devDependencies": {
-    "babel-cli": "^6.0.0",
-    "babel-preset-es2015": "^6.0.0",
-    "babel-plugin-transform-object-rest-spread": "^6.0.0",
+    "babel": "^6.0.15",
+    "babel-cli": "^6.1.2",
     "chai": "^3.2.0",
     "hide-stack-frames-from": "^1.0.0",
     "mocha": "^2.2.1",
     "nth": "^0.1.2"
   },
   "scripts": {
-    "dist": "babel src --out-dir lib",
+    "dist": "node ./node_modules/babel-cli/bin/babel src --out-dir lib",
     "watch": "npm run dist -- -w",
     "test": "mocha",
     "prepublish": "npm run dist"

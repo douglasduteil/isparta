@@ -27,6 +27,9 @@ module.exports = {
       end: {line: 4, column: 26}
     },
     {
+      //  5. };
+      //  6.
+      //  7. /* istanbul ignore next */
       //  8. if (true) {
       //  9.   var a = 5;
       // 10. }
@@ -69,6 +72,9 @@ module.exports = {
       ]
     },
     {
+      //  5. };
+      //  6.
+      //  7. /* istanbul ignore next */
       //  8. if (true) {
       line: 8, type: 'if',
       locations: [

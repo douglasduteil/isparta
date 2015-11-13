@@ -19,7 +19,7 @@ module.exports = {
       //  4.   return baz(bar ? 0 : 1);
       //  5. };
       start: {line: 3, column: 0},
-      end: {line: 5, column: 2}
+      end: {line: 5, column: 1}
     },
     {
       //  4.   return baz(bar ? 0 : 1);
@@ -27,10 +27,13 @@ module.exports = {
       end: {line: 4, column: 26}
     },
     {
+      //  5. };
+      //  6.
+      //  7. /* istanbul ignore next */
       //  8. if (true) {
       //  9.   var a = 5;
       // 10. }
-      start: {line: 8, column: 0},
+      start: {line: 5, column: 2},
       end: {line: 10, column: 1},
       skip: true
     },
@@ -69,17 +72,20 @@ module.exports = {
       ]
     },
     {
+      //  5. };
+      //  6.
+      //  7. /* istanbul ignore next */
       //  8. if (true) {
       line: 8, type: 'if',
       locations: [
         {
-          start: {line: 8, column: 0},
-          end: {line: 8, column: 0},
+          start: {line: 5, column: 2},
+          end: {line: 5, column: 2},
           skip: true
         },
         {
-          start: {line: 8, column: 0},
-          end: {line: 8, column: 0},
+          start: {line: 5, column: 2},
+          end: {line: 5, column: 2},
           skip: true
         }
       ]

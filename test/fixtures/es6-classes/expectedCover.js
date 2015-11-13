@@ -67,10 +67,10 @@ module.exports = {
 
   fnMap: []
     .concat(generateNSkipedFunction(
-      {name: '(anonymous_1)', line: 9},
-      {name: 'defineProperties', line: 9},
-      {name: '(anonymous_3)', line: 9},
-      {name: '_classCallCheck', line: 11}
+      {name: '(anonymous_1)', line: 3},
+      {name: 'defineProperties', line: 3},
+      {name: '(anonymous_3)', line: 3},
+      {name: '_classCallCheck', line: 9}
     ))
     .concat([
       // 5th fn
@@ -85,44 +85,26 @@ module.exports = {
     .concat(generateNSkipedFunction(
       {name: 'Animal', line: 14}
     ))
-    .concat([
-      // 7th fn
-      {
-        name: 'sayHi', line: 20,
-        loc: {
-          start: {line: 4, column: 7},
-          end: {line: 4, column: 10}
-        }
-      },
-      // 8th fn
-      {
-        name: 'sayOther', line: 25,
-        loc: {
-          start: {line: 8, column: 10},
-          end: {line: 8, column: 13}
-        }
-      },
-      // 9th fn
-      {
-        name: 'getName', line: 30,
-        loc: {
-          start: {line: 12, column: 16},
-          end: {line: 12, column: 19}
-        }
-      }
-    ])
-  ,
+    .concat(generateNSkipedFunction(
+      {name: 'sayHi', line: 20}
+    ))
+    .concat(generateNSkipedFunction(
+      {name: 'sayOther', line: 25}
+    ))
+    .concat(generateNSkipedFunction(
+      {name: 'getName', line: 30}
+    )),
 
   branchMap: generateNSkipedBranch(
     // 1th branch
-    {line: 9, type: 'binary-expr'},
+    {line: 3, type: 'binary-expr'},
     // 2th branch
-    {line: 9, type: 'if'},
+    {line: 3, type: 'if'},
     // 3th branch
-    {line: 9, type: 'if'},
+    {line: 3, type: 'if'},
     // 4th branch
-    {line: 9, type: 'if'},
+    {line: 3, type: 'if'},
     // 5th branch
-    {line: 11, type: 'if'}
+    {line: 9, type: 'if'}
   )
 };

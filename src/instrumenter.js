@@ -5,7 +5,7 @@ import {transform as babelTransform} from 'babel-core';
 import esprima from 'esprima';
 import escodegen from 'escodegen';
 
-import {SourceMapConsumer, SourceMapGenerator} from 'source-map';
+import {SourceMapConsumer} from 'source-map';
 
 const POSITIONS = ['start', 'end'];
 
@@ -24,7 +24,7 @@ export class Instrumenter extends istanbul.Instrumenter {
 
   instrumentSync(code, fileName) {
 
-    let result = this._r =
+    const result = this._r =
       babelTransform(code, { ...this.babelOptions, filename: fileName });
     this._babelMap = new SourceMapConsumer(result.map);
 
@@ -151,4 +151,3 @@ export class Instrumenter extends istanbul.Instrumenter {
   };
 
 }
-

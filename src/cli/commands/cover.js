@@ -1,112 +1,21 @@
 //
 
-import {existsSync, writeFileSync, statSync, readdirSync} from 'fs';
-import path from 'path';
-import Module from 'module';
-
-//
-import assign from 'object-assign';
-import which from 'which';
-import mkdirp from 'mkdirp';
-import partial from 'lodash.partial';
-import nomnom from 'nomnomnomnom';
+import {existsSync, writeFileSync} from 'fs';
+import {Instrumenter} from '../../instrumenter';
 import {hook, Collector, Reporter, matcherFor, config as configuration} from 'istanbul';
-import {Instrumenter} from './instrumenter';
+import mkdirp from 'mkdirp';
+import Module from 'module';
+import assign from 'object-assign';
+import path from 'path';
+import which from 'which';
 
 //
 
+export default coverCmd
 
 //
 
-nomnom.command('cover')
-  .help("transparently adds coverage information to a node command. Saves coverage.json and reports at the end of execution")
-
-  .option('cmd', {
-    required: true,
-    position: 1,
-    help: 'ES6 js files to cover (using babel)'
-  })
-
-  .option('config', {
-    metavar: '<path-to-config>',
-    help: 'the configuration file to use, defaults to .istanbul.yml'
-  })
-  .option('default-excludes', {
-    flag: true,
-    help: 'apply default excludes [ **/node_modules/**, **/test/**, **/tests/** ]'
-  })
-  .option('excludes', {
-    abbr: 'x',
-    default: [],
-    help: 'one or more fileset patterns e.g. "**/vendor/**"',
-    list: true,
-    metavar: '<exclude-pattern>'
-  })
-  .option('report', {
-    default: 'lcv',
-    metavar: '<format>',
-    list: true,
-    help: 'report format'
-  })
-  .option('root', {
-    metavar: '<path>',
-    help: 'the root path to look for files to instrument'
-  })
-  .option('include', {
-    default: ['**/*.js'],
-    metavar: '<include-pattern>',
-    list: true,
-    abbr: 'i',
-    help: 'one or more fileset patterns e.g. \'**/*.js\''
-  })
-  .option('verbose', {
-    flag: true,
-    abbr: 'v',
-    help: 'verbose mode'
-  })
-  .option('include-all-sources', {
-    flag: true,
-    help: 'instrument all unused sources after running tests'
-  })
-
-  .callback(opts => {
-
-    let args = opts._,
-        files = [],
-        cmdArgs = [];
-
-    args.forEach(arg => {
-
-        let file = lookupFiles(arg);
-        if (file) files = files.concat(file);
-    });
-
-    opts.include = opts.include.concat(files);
-
-    coverCmd(opts);
-  });
-;
-
-nomnom.nom();
-
-function lookupFiles (path) {
-
-  if (existsSync(path)) {
-    let stat = statSync(path);
-    if (stat.isFile()) return path;
-  }
-}
-
-function callback(err){
-  if (err){
-    console.error(err);
-    process.exit(1);
-  }
-  process.exit(0);
-}
-
-function coverCmd(opts) {
-
+function coverCmd (opts) {
   let config = overrideConfigWith(opts);
   let istanbulCoveragePath = path.resolve(config.reporting.dir());
   let reporter = new Reporter(config, istanbulCoveragePath);
@@ -118,7 +27,7 @@ function coverCmd(opts) {
     try {
       cmd = which.sync(cmd);
     } catch (ex) {
-      return callback(`Unable to resolve file [${cmd}]`);
+      return processEnding(`Unable to resolve file [${cmd}]`);
     }
   } else {
     cmd = path.resolve(cmd);
@@ -132,7 +41,7 @@ function coverCmd(opts) {
 
   ////
 
-  function overrideConfigWith(opts){
+  function overrideConfigWith (opts) {
     let overrides = {
       verbose: opts.verbose,
       instrumentation: {
@@ -159,7 +68,7 @@ function coverCmd(opts) {
     return configuration.loadFile(opts.config, overrides);
   }
 
-  function enableHooks() {
+  function enableHooks () {
     opts.reportingDir = path.resolve(config.reporting.dir());
     mkdirp.sync(opts.reportingDir);
     reporter.addAll(config.reporting.reports());
@@ -187,8 +96,8 @@ function coverCmd(opts) {
         .map((ext) => '**/*' + ext),
       excludes: excludes
     }, (err, matchFn) => {
-      if (err){
-        return callback(err);
+      if (err) {
+        return processEnding(err);
       }
 
       prepareCoverage(matchFn);
@@ -197,12 +106,12 @@ function coverCmd(opts) {
   }
 
 
-  function prepareCoverage(matchFn) {
+  function prepareCoverage (matchFn) {
     let coverageVar = `$$cov_${Date.now()}$$`;
-    let instrumenter = new Instrumenter({ coverageVariable : coverageVar });
+    let instrumenter = new Instrumenter({ coverageVariable: coverageVar });
     let transformer = instrumenter.instrumentSync.bind(instrumenter);
 
-    hook.hookRequire(matchFn, transformer, assign({ verbose : opts.verbose }, config.instrumentation.config));
+    hook.hookRequire(matchFn, transformer, assign({ verbose: opts.verbose }, config.instrumentation.config));
 
     global[coverageVar] = {};
 
@@ -236,7 +145,7 @@ function coverCmd(opts) {
         console.error(`Writing coverage reports at [${opts.reportingDir}]`);
         console.error(Array(80 + 1).join('='));
       }
-      reporter.write(collector, true, callback);
+      reporter.write(collector, true, processEnding);
     });
 
     if (config.instrumentation.includeAllSources()) {
@@ -255,12 +164,22 @@ function coverCmd(opts) {
 
   }
 
-  function runCommandFn() {
+  function runCommandFn () {
     process.argv = ["node", cmd].concat(cmdArgs);
     if (opts.verbose) {
       console.log('Running: ' + process.argv.join(' '));
     }
-    process.env.running_under_istanbul=1;
+    process.env.running_under_istanbul = 1;
     Module.runMain(cmd, null, true);
   }
+}
+
+//
+
+function processEnding (err) {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  process.exit(0);
 }

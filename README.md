@@ -8,12 +8,6 @@ Its intention is to be used with [karma](http://karma-runner.github.io/) and [ka
 
 ## Installation
 
-For the moment, a custom fork of karma-coverage needs to be installed which supports isparta as an instrumenter.
-
-```sh
-$ npm install --save-dev douglasduteil/karma-coverage#next
-```
-
 Isparta can be installed using
 
 ```sh
@@ -53,7 +47,7 @@ But can customize the babel options thanks to my [fork](https://github.com/dougl
 ```js
 
 // Note that you ".babelrc" will be the default options for babel.
-var babelMoreOptions = { stage: 0 };
+var babelMoreOptions = { presets: 'es2015' };
 
 // [...]
 

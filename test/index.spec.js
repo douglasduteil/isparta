@@ -19,17 +19,17 @@ import {Instrumenter, Reporter} from '../src/isparta';
 const MAP_TYPES = [
   {
     name: 'statement',
-    get fullName() { return `${this.name}Map` },
+    get fullName () { return `${this.name}Map` },
     getLocations: (loc) => [loc]
   },
   {
     name: 'fn',
-    get fullName() { return `${this.name}Map` },
+    get fullName () { return `${this.name}Map` },
     getLocations: (fn) => [fn.loc]
   },
   {
     name: 'branch',
-    get fullName() { return `${this.name}Map` },
+    get fullName () { return `${this.name}Map` },
     getLocations: (br) => br.locations
   }
 ];
@@ -45,7 +45,7 @@ let instumenterSuite = describe("Isparta instrumenter", function () {
 
 });
 
-function generateSourceMapTest(allDone) {
+function generateSourceMapTest (allDone) {
 
   let instrumenter = new Instrumenter();
   const fixturesToTest = getFixturesTest();
@@ -74,7 +74,7 @@ function generateSourceMapTest(allDone) {
 
 }
 
-function displaySnippetError() {
+function displaySnippetError () {
   if (!this.error) {
     return;
   }
@@ -93,11 +93,11 @@ function displaySnippetError() {
 }
 
 
-function testCoverMaps(maps, fixtureTest) {
+function testCoverMaps (maps, fixtureTest) {
 
   var actualCodeLines = fixtureTest.actual.code.split('\n');
 
-  return function testCoverMap(type) {
+  return function testCoverMap (type) {
     let mapKey = `${type.name}Map`;
     let map = values(maps[mapKey] || {});
 
@@ -107,7 +107,7 @@ function testCoverMaps(maps, fixtureTest) {
 
       ////
 
-      function locationIt() {
+      function locationIt () {
 
         this.error = {
           actualLocation: type.getLocations(loc),
@@ -132,7 +132,9 @@ function testCoverMaps(maps, fixtureTest) {
 //
 
 // Minimal Lodash util functions
-function values(arr) { return Object.keys(arr).map(key => arr[key] || {}); }
-function after(n, func) { return function () {
-  if (--n < 1) { return func.apply(this, arguments); }
-};}
+function values (arr) { return Object.keys(arr).map(key => arr[key] || {}); }
+function after (n, func) {
+  return function () {
+    if (--n < 1) { return func.apply(this, arguments); }
+  };
+}

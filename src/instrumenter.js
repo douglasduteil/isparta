@@ -1,3 +1,4 @@
+//
 
 import istanbul from 'istanbul';
 import {transform as babelTransform} from 'babel-core';
@@ -11,7 +12,7 @@ const POSITIONS = ['start', 'end'];
 
 export class Instrumenter extends istanbul.Instrumenter {
 
-  constructor(options = {}) {
+  constructor (options = {}) {
     super();
 
     istanbul.Instrumenter.call(this, options);
@@ -22,7 +23,7 @@ export class Instrumenter extends istanbul.Instrumenter {
     };
   }
 
-  instrumentSync(code, fileName) {
+  instrumentSync (code, fileName) {
 
     const result = this._r =
       babelTransform(code, { ...this.babelOptions, filename: fileName });
@@ -44,25 +45,25 @@ export class Instrumenter extends istanbul.Instrumenter {
     return this.instrumentASTSync(program, fileName, code);
   }
 
-  getPreamble(sourceCode, emitUseStrict) {
+  getPreamble (sourceCode, emitUseStrict) {
 
-     [['s','statementMap'], ['f', 'fnMap'], ['b', 'branchMap']]
-    .forEach(([metricName, metricMapName]) => {
-      let [metrics, metricMap] = [
-        this.coverState[metricName],
-        this.coverState[metricMapName]
-      ];
-      let transformFctName = `_${metricMapName}Transformer`;
-      let transformedMetricMap = this[transformFctName](metricMap, metrics)
-      this.coverState[metricMapName] = transformedMetricMap;
-    })
+    [['s', 'statementMap'], ['f', 'fnMap'], ['b', 'branchMap']]
+      .forEach(([metricName, metricMapName]) => {
+        let [metrics, metricMap] = [
+          this.coverState[metricName],
+          this.coverState[metricMapName]
+        ];
+        let transformFctName = `_${metricMapName}Transformer`;
+        let transformedMetricMap = this[transformFctName](metricMap, metrics)
+        this.coverState[metricMapName] = transformedMetricMap;
+      })
 
     return super.getPreamble(sourceCode, emitUseStrict);
   }
 
   ////
 
-   _statementMapTransformer(metrics){
+  _statementMapTransformer (metrics) {
     return Object.keys(metrics)
       .map((index) => metrics[index])
       .map((statementMeta) => {
@@ -72,7 +73,7 @@ export class Instrumenter extends istanbul.Instrumenter {
       .reduce(this._arrayToArrayLikeObject, {});
   }
 
-  _fnMapTransformer(metrics){
+  _fnMapTransformer (metrics) {
     return Object.keys(metrics)
       .map((index) => metrics[index])
       .map((fnMeta) => {
@@ -86,12 +87,12 @@ export class Instrumenter extends istanbul.Instrumenter {
           }
         }
 
-        return {...fnMeta, loc};
+        return { ...fnMeta, loc };
       })
       .reduce(this._arrayToArrayLikeObject, {});
   }
 
-  _branchMapTransformer(metrics){
+  _branchMapTransformer (metrics) {
     return Object.keys(metrics)
       .map((index) => metrics[index])
       .map((branchMeta) => {
@@ -107,8 +108,8 @@ export class Instrumenter extends istanbul.Instrumenter {
 
   ////
 
-  _getMetricOriginalLocations(metricLocations = []){
-    let o = { line: 0, column: 0};
+  _getMetricOriginalLocations (metricLocations = []) {
+    let o = { line: 0, column: 0 };
 
     return metricLocations
       .map((generatedPositions) => {
@@ -132,7 +133,7 @@ export class Instrumenter extends istanbul.Instrumenter {
       })
   }
 
-  _getOriginalPositionsFor(generatedPositions = { start : {}, end : {} }){
+  _getOriginalPositionsFor (generatedPositions = { start: {}, end: {} }) {
     return POSITIONS
       .map((position) => [generatedPositions[position], position])
       .reduce((originalPositions, [generatedPosition, position]) => {
@@ -145,7 +146,7 @@ export class Instrumenter extends istanbul.Instrumenter {
       }, {});
   }
 
-  _arrayToArrayLikeObject(arrayLikeObject, item, index) {
+  _arrayToArrayLikeObject (arrayLikeObject, item, index) {
     arrayLikeObject[index + 1] = item;
     return arrayLikeObject;
   };

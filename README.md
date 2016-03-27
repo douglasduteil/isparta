@@ -1,4 +1,4 @@
-# isparta [![Build Status][travis-image]][travis-url] [![NPM version][npm-image]][npm-url]
+# isparta [![Build Status][travis-image]][travis-url] [![NPM version][npm-image]][npm-url] [![No Maintenance Intended][unmaintained-image]][unmaintained-url]
 
 > Isparta is a code coverage tool for ES6 using [babel](https://github.com/babel/babel).
 
@@ -77,3 +77,5 @@ coverageReporter: {
 [npm-image]: http://img.shields.io/npm/v/isparta.svg
 [travis-url]: http://travis-ci.org/douglasduteil/isparta
 [travis-image]: http://travis-ci.org/douglasduteil/isparta.svg?branch=master
+[unmaintained-image]: http://unmaintained.tech/badge.svg
+[unmaintained-url]: http://unmaintained.tech

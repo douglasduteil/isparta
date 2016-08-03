@@ -1,2 +1,0 @@
---compilers babel:babel-core/register
---require babel-polyfill

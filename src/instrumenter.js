@@ -3,7 +3,7 @@
 import istanbul from 'istanbul';
 import {transform as babelTransform} from 'babel-core';
 
-import esprima from 'esprima';
+import { parse } from 'esprima';
 import escodegen from 'escodegen';
 
 import {SourceMapConsumer} from 'source-map';
@@ -30,7 +30,7 @@ export class Instrumenter extends istanbul.Instrumenter {
     this._babelMap = new SourceMapConsumer(result.map);
 
     // PARSE
-    let program = esprima.parse(result.code, {
+    let program = parse(result.code, {
       loc: true,
       range: true,
       tokens: this.opts.preserveComments,

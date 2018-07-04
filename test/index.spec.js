@@ -1,8 +1,5 @@
 //
 
-import hideStack from 'hide-stack-frames-from'
-hideStack('mocha', 'babel-core');
-
 import Mocha from 'mocha'
 let {Test, Suite} = Mocha;
 

@@ -54,7 +54,6 @@
     "babel-preset-es2015": "^6.1.4",
     "chai": "^3.2.0",
     "douglasduteil...shelltest": "^2.0.0",
-    "hide-stack-frames-from": "^1.0.0",
     "mocha": "^2.2.1",
     "nth": "^0.1.2",
     "sinon": "^1.17.2",

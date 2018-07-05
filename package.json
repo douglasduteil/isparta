@@ -57,7 +57,7 @@
     "mocha": "^2.2.1",
     "nth": "^0.1.2",
     "sinon": "^1.17.2",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^3.0.0"
   },
   "scripts": {
     "dist": "babel src --out-dir lib",

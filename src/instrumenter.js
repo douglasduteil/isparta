@@ -30,6 +30,7 @@ export class Instrumenter extends istanbul.Instrumenter {
     this._babelMap = new SourceMapConsumer(result.map);
 
     // PARSE
+    result.code = result.code.replace(/^#!.+[\r\n]/, '\n');
     let program = parse(result.code, {
       loc: true,
       range: true,
